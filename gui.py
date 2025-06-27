@@ -21,13 +21,27 @@ class GUI:
         
     def on_selection(self,event):
         self.habit_type = self.habit_type_choice.get()
-        self.habit_input = ttk.Entry(self.habit_window)
-        self.habit_input.pack(padx=10, pady=10)
+        self.habit_input_name = ttk.Entry(self.habit_window)
+        self.habit_input_name.insert(0, "Enter habit name")
+        if self.habit_input_name.get() == "Enter habit name":
+            self.habit_input_name.bind("<FocusIn>", lambda e: self.habit_input_name.delete(0, "end"))
+        self.habit_input_name.pack(padx=10, pady=10)
+        self.habits_input_amount = ttk.Entry(self.habit_window)
+        self.habits_input_amount.insert(0, "Enter habit amount")
+        if self.habits_input_amount.get() == "Enter habit amount":
+            self.habits_input_amount.bind("<FocusIn>", lambda e: self.habits_input_amount.delete(0, "end"))
+        self.habits_input_amount.pack(padx=10, pady=10)
         self.add_button = ttk.Button(self.habit_window,text='Add',command=self.habit_update)
 
         self.add_button.pack(padx=10, pady=10)
     def load_prev_habits(self):
-        self.habits_name,self.habit_type,self.habits_amount = self.back.load_habits()
+        try:
+            self.habits_name,self.habit_type,self.habits_amount = self.back.load_habits()
+        except Exception as e:
+            print(f"Error loading habits: {e}")
+            self.habits_name = []
+            self.habit_type = []
+            self.habits_amount = [] 
         for habit in self.habits_name:
             self.entry_frame1 = ttk.Frame(self.root)
             self.entry_frame1.pack(padx=10, pady=10)
@@ -41,7 +55,7 @@ class GUI:
             self.checkbox.pack(side="left")
 
     def habit_update(self):
-        self.name = self.habit_input.get()
+        self.name = self.habit_input_name.get()
         self.habits_name.append(self.name)
         
         self.entry_frame = ttk.Frame(self.root)
@@ -61,10 +75,11 @@ class GUI:
         self.habit_window.title("Add Habit")
         self.habit_window.geometry("300x200")
         self.habit_window.configure(background="gray")
-        self.habit_type_choice = ttk.Combobox(self.habit_window,values= ['hours','time'],state='readonly')
+        self.habit_type_choice = ttk.Combobox(self.habit_window,values= ['checkbox','time'],state='readonly')
         self.habit_type_choice.pack(padx=10, pady=10)
         self.habit_type_choice.set("Select Habit Type")
         self.habit_type_choice.bind("<<ComboboxSelected>>", self.on_selection)
+        self.habit_type.append(self.habit_type_choice.get())
 
 
 guy = GUI(tkinter.Tk())
