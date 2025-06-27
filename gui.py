@@ -65,7 +65,7 @@ class GUI:
         self.habit_type_choice.pack(padx=10, pady=10)
         self.habit_type_choice.set("Select Habit Type")
         self.habit_type_choice.bind("<<ComboboxSelected>>", self.on_selection)
-print('helpwao')
-print('help')
+
+
 guy = GUI(tkinter.Tk())
 guy.root.mainloop()
