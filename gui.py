@@ -17,7 +17,7 @@ class GUI:
         self.button.place(x=800,y=10)
         self.habits_name,self.type,self_amount = self.back.get_habbits()
         self.load_prev_habits()
-        self.root.resizable(False, False)
+
         
     def on_selection(self,event):
         self.habit_type = self.habit_type_choice.get()
@@ -53,7 +53,11 @@ class GUI:
             # Add checkbox inside the frame next to the label
             self.checkbox = ttk.Checkbutton(self.entry_frame1)
             self.checkbox.pack(side="left")
-
+    def habits_remove_button(self,frame,habit_name=None):
+        self.remove_button = ttk.Button(frame,text='--', command=lambda: self.entry_frame.destroy())
+        self.remove_button.pack(side="left", padx=(0, 10))
+        self.habits_name.remove(habit_name) if habit_name else None
+        self
     def habit_update(self):
         self.name = self.habit_input_name.get()
         self.habits_name.append(self.name)
@@ -70,6 +74,7 @@ class GUI:
         self.checkbox.pack(side="left")
         self.back.add_habit(self.name, self.habit_type, 0)
         self.back.save_habits()
+        self.habits_remove_button(self.entry_frame,self.name)
     def on_button_click(self):
         self.habit_window = Toplevel(self.root)
         self.habit_window.title("Add Habit")
@@ -81,6 +86,6 @@ class GUI:
         self.habit_type_choice.bind("<<ComboboxSelected>>", self.on_selection)
         self.habit_type.append(self.habit_type_choice.get())
 
-
-guy = GUI(tkinter.Tk())
-guy.root.mainloop()
+if __name__ == "__main__":
+    guy = GUI(tkinter.Tk())
+    guy.root.mainloop()
