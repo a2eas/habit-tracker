@@ -36,12 +36,12 @@ class GUI:
         self.add_button.pack(padx=10, pady=10)
     def load_prev_habits(self):
         try:
-            self.habits_name,self.habit_type,self.habits_amount = self.back.load_habits()
+            self.habits_names,self.habit_types,self.habits_amounts = self.back.load_habits()
         except Exception as e:
             print(f"Error loading habits: {e}")
-            self.habits_name = []
-            self.habit_type = []
-            self.habits_amount = [] 
+            self.habits_names = []
+            self.habit_types = []
+            self.habits_amounts = [] 
         for habit in self.habits_name:
             self.entry_frame1 = ttk.Frame(self.root)
             self.entry_frame1.pack(padx=10, pady=10)
@@ -54,19 +54,24 @@ class GUI:
             self.checkbox = ttk.Checkbutton(self.entry_frame1)
             self.checkbox.pack(side="left")
     def habits_remove_button(self,frame,habit_name=None):
-        self.remove_button = ttk.Button(frame,text='--', command=lambda: self.entry_frame.destroy())
+        self.remove_button = ttk.Button(frame,text='--', command=lambda: self.remove_habit(habit_name))
         self.remove_button.pack(side="left", padx=(0, 10))
+    def remove_habit(self, habit_name=None):
+        print(f"Removing habit: {habit_name}")
+        print(f"Current habits: {self.habits_names}")
+        index = self.habits_name.index(habit_name) if habit_name else None
+        self.habit_type.remove(self.habit_type[index]) if index is not None else None
+        self.habits_amount.remove(self.habits_amount[index]) if index is not None else None
         self.habits_name.remove(habit_name) if habit_name else None
-        self
     def habit_update(self):
         self.name = self.habit_input_name.get()
-        self.habits_name.append(self.name)
+        self.habits_names.append(self.name)
         
         self.entry_frame = ttk.Frame(self.root)
         self.entry_frame.pack(padx=10, pady=10)
 
         # Add label inside the frame
-        self.label = ttk.Label(self.entry_frame, text=self.habits_name[-1], font=25)
+        self.label = ttk.Label(self.entry_frame, text=self.habits_names[-1], font=25)
         self.label.pack(side="left", padx=(0, 10))
 
         # Add checkbox inside the frame next to the label
@@ -84,7 +89,8 @@ class GUI:
         self.habit_type_choice.pack(padx=10, pady=10)
         self.habit_type_choice.set("Select Habit Type")
         self.habit_type_choice.bind("<<ComboboxSelected>>", self.on_selection)
-        self.habit_type.append(self.habit_type_choice.get())
+        self.habit_types.append(self.habit_type_choice.get())
+        
 
 if __name__ == "__main__":
     guy = GUI(tkinter.Tk())
